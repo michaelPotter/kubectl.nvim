@@ -1,3 +1,5 @@
+local kube_util = require("kubectl.kube_util")
+
 M = {
 	info = {
 		supported_commands = {
@@ -60,11 +62,12 @@ function M.get(args)
 	vim.api.nvim_win_set_buf(0, buf)
 
 	-- Fill the buffer
-	vim.api.nvim_command(":r ! kubectl " .. args.args)
-	vim.api.nvim_command(":normal ggdd")
+	local lines = vim.fn.systemlist("kubectl " .. args.args)
+	vim.api.nvim_buf_set_lines(buf, 0, 0, false, lines)
+	vim.api.nvim_command(":normal gg")
 
 	-- Set buffer options
-	-- vim.api.nvim_buf_set_option(buf, 'filetype', 'kubectldescribe')
+	vim.api.nvim_buf_set_option(buf, 'filetype', 'kubectlget')
 	vim.api.nvim_buf_set_option(buf, 'modified', false)
 	vim.api.nvim_buf_set_option(buf, 'modifiable', false)
 	vim.api.nvim_buf_set_option(buf, 'readonly', true)
@@ -83,8 +86,9 @@ function M.describe(args)
 	vim.api.nvim_win_set_buf(0, buf)
 
 	-- Fill the buffer
-	vim.api.nvim_command(":r ! kubectl " .. args.args)
-	vim.api.nvim_command(":normal ggdd")
+	local lines = vim.fn.systemlist("kubectl " .. args.args)
+	vim.api.nvim_buf_set_lines(buf, 0, 0, false, lines)
+	vim.api.nvim_command(":normal gg")
 
 	-- Set buffer options
 	vim.api.nvim_buf_set_option(buf, 'filetype', 'kubectldescribe')
