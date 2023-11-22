@@ -23,36 +23,18 @@ function M.cmd(args)
 
 end
 
--- TODO move to a util file?
-local function __parse_describe_cmd(fargs)
-	local class = ""
-	local item = ""
-	-- NOTE: this assumes flags come after command
-	for _, value in pairs(fargs) do
-		if (value == "describe") then
-		elseif class == "" then
-			class = value
-		elseif item == "" then
-			item = value
-		else
-			break
-		end
-	end
-	return {
-		class = class,
-		item = item,
-	}
-end
-
+-- Run the window split if a modifier like "vertical" was given
 local function do_cmd_mod_split(mods)
 	if mods ~= "" then
 		vim.cmd(mods .. " split")
 	end
 end
 
+-- Run a kubectl "get" command and output to a buffer
 function M.get(args)
-	-- local cmd_details = __parse_describe_cmd(args.fargs)
+	local kube_resource = kube_util.determine_resource_from_cmd(args.fargs)
 
+	-- TODO see if there's an existing buffer we can re-use
 	-- Create the buffer
 	local buf = vim.api.nvim_create_buf(true, false)
 
@@ -72,11 +54,14 @@ function M.get(args)
 	vim.api.nvim_buf_set_option(buf, 'modifiable', false)
 	vim.api.nvim_buf_set_option(buf, 'readonly', true)
 	vim.api.nvim_buf_set_name(buf, "kubectl " .. args.args)
+	vim.api.nvim_buf_set_var(buf, "kube_resource", kube_resource)
 end
 
+-- Run a kubectl "describe" command and output to a buffer
 function M.describe(args)
-	local cmd_details = __parse_describe_cmd(args.fargs)
+	local kube_resource = kube_util.determine_resource_from_cmd(args.fargs)
 
+	-- TODO see if there's an existing buffer we can re-use
 	-- Create the buffer
 	local buf = vim.api.nvim_create_buf(true, false)
 
@@ -97,6 +82,7 @@ function M.describe(args)
 	vim.api.nvim_buf_set_option(buf, 'readonly', true)
 	-- vim.api.nvim_buf_set_name(buf, cmd_details.class .. "/" .. cmd_details.item)
 	vim.api.nvim_buf_set_name(buf, "kubectl " .. args.args)
+	vim.api.nvim_buf_set_var(buf, "kube_resource", kube_resource)
 end
 
 -- lua require("kubectl").devdebug()

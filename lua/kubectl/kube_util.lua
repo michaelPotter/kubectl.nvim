@@ -23,9 +23,25 @@ function kube_util.get_api_resources()
 		if shortname ~= "" then resource.shortname = shortname end
 		table.insert(kube_util.cache.api_resources, resource)
 	end
-	vim.notify(header_line)
-	vim.notify(vim.inspect(kube_util.cache.api_resources))
+	return kube_util.cache.api_resources
+end
 
+local function is_api_resource(check_name)
+	for _, res in pairs(kube_util.get_api_resources()) do
+		if check_name == res.name or check_name == res.shortname then
+			return true
+		end
+	end
+	return false
+end
+
+function kube_util.determine_resource_from_cmd(fargs)
+	for i, arg in pairs(fargs) do
+		if is_api_resource(arg) then
+			return arg
+		end
+	end
+	return "?"
 end
 
 return kube_util
