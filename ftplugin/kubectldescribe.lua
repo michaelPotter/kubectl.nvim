@@ -1,0 +1,12 @@
+-- local function refresh()
+-- 	if (vim.g.cmd and vim.g.cmd ~= "") then
+-- 		vim.cmd [[
+-- 		set noreadonly
+-- 		set modifiable
+-- 		normal ggDG
+-- 		exec ':r ! ' .. cmd
+-- 	]]
+-- 	end
+-- end
+
+-- vim.api.nvim_buf_create_user_command("Refresh", refresh)
