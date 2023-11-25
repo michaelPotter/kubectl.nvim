@@ -86,9 +86,8 @@ function M.describe(args)
 end
 
 -- lua require("kubectl").devdebug()
-function M.devdebug()
+function M.devhook()
 	vim.api.nvim_set_keymap("n", "<leader>kk", ":Kubectl describe pods solr-0<cr>", {})
-	vim.cmd("DoOnWrite Lazy reload kubectl.nvim")
 end
 
 return M
