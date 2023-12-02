@@ -87,7 +87,8 @@ end
 
 -- lua require("kubectl").devdebug()
 function M.devhook()
-	vim.api.nvim_set_keymap("n", "<leader>kk", ":Kubectl describe pods solr-0<cr>", {})
+	-- vim.api.nvim_set_keymap("n", "<leader>kk", ":Kubectl describe pods solr-0<cr>", {})
+	vim.api.nvim_set_keymap("n", "<leader>kk", ":lua require('kubectl.ui_util').describe_resource(nil, nil, 'tab')<cr>", {})
 end
 
 return M
