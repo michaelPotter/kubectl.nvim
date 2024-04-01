@@ -28,7 +28,7 @@ end
 
 local function is_api_resource(check_name)
 	for _, res in pairs(kube_util.get_api_resources()) do
-		if check_name == res.name or check_name == res.shortname then
+		if check_name == res.name or check_name == res.shortname or check_name .. "s" == res.name then
 			return true
 		end
 	end

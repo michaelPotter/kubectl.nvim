@@ -33,6 +33,9 @@ end
 -- Run a kubectl "get" command and output to a buffer
 function M.get(args)
 	local kube_resource = kube_util.determine_resource_from_cmd(args.fargs)
+	if kube_resource == '?' then
+		vim.notify("Could not determine kubernetes resource from command", vim.log.levels.WARN)
+	end
 
 	-- TODO see if there's an existing buffer we can re-use
 	-- Create the buffer
